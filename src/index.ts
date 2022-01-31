@@ -1,3 +1,7 @@
-import {app, server} from './app'
+import express from 'express';
+import { app, server } from './app';
+import { storeRouter } from './router/StoreRouter';
 
-server
+app.use('/stores', storeRouter);
+
+server;

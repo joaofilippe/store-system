@@ -6,7 +6,7 @@
   "scripts": {
     "migrations:store": "nodemon ./src/database/migrations/StoreMigrations.ts",
     "migrations:products": "nodemon ./src/database/migrations/ProductsMigrations.ts",
-    "dev": "ts-node-dev ./src/index.ts",
+    "dev": "nodemon ./src/index.ts",
     "build": "tsc",
     "test": "jest"
   },

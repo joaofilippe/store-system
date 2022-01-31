@@ -1,25 +1,22 @@
 import express, { Express } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { AddressInfo } from 'net';
 
 dotenv.config();
 
-const app: Express = express();
+export const app: Express = express();
 app.use(express.json());
-app.use(cors);
+app.use(cors());
 
-const port = Number(process.env.PORT);
+const port = Number(process.env.PORT) || 3003;
 
-const server = app.listen(port || 3003, () => {
+export const server = app.listen(port, () => {
     if (server) {
-        const address = server.address() as AddressInfo;
         console.log(
-            `Server is running in http://localhost:${address.port}`
+            `Server is running in http://localhost:${port}`
         );
     } else {
         console.error(`Failure upon starting server.`);
     }
 });
 
-export { app, server };

@@ -1,6 +1,8 @@
 import knex from 'knex';
 import dotenv from 'dotenv';
 
+dotenv.config()
+
 export default class BaseDatabase {
     protected connection = knex({
         client: 'mysql2',

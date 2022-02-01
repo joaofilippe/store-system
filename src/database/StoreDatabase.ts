@@ -1,11 +1,10 @@
-import Stores from '../entities/Stores';
+import Stores, { StoresDB } from '../entities/Stores';
 import { SignupInput } from '../entities/Stores';
 import BaseDatabase from './BaseDatabase';
 import StoreModel from './models/StoreModel';
 
 export default class StoreDatabase extends BaseDatabase {
-
-    tableName = 'stores'
+    tableName = 'stores';
 
     insert = async (input: SignupInput) => {
         try {
@@ -19,7 +18,7 @@ export default class StoreDatabase extends BaseDatabase {
                 adress,
                 role,
                 createdAt,
-                updatedAt
+                updatedAt,
             }: SignupInput = input;
 
             const storeModel = new StoreModel(
@@ -32,12 +31,29 @@ export default class StoreDatabase extends BaseDatabase {
                 role,
                 createdAt,
                 updatedAt
+            );
+
+            const storeInputDB = storeModel.getStoreModel();
+
+            await this.connection(this.tableName).insert(
+                storeInputDB
+            );
+        } catch (error: any) {
+            throw new Error(error.sqlMessage || error.message);
+        }
+    };
+
+    selectByEmail = async (email: string): Promise<Stores> => {
+        try {
+            const result: StoresDB[] = await this.connection(
+                this.tableName
             )
+                .select()
+                .where({ email });
 
-            const storeInputDB = storeModel.getStoreModel()
+            const storeFromDB = Stores.toStores(result[0]);
 
-            await this.connection(this.tableName).insert(storeInputDB)
-
+            return storeFromDB;
         } catch (error: any) {
             throw new Error(error.sqlMessage || error.message);
         }

@@ -52,8 +52,50 @@ export default class Stores {
 
         return store;
     };
+
+    static toStores = (input: StoresDB): Stores => {
+        const {
+            store_id,
+            store_name,
+            head_id,
+            email,
+            password,
+            CNPJ,
+            adress,
+            role,
+            created_at,
+            updated_at,
+        } : StoresDB = input;
+
+        const store = new Stores(
+            store_id,
+            store_name,
+            head_id,
+            email,
+            password,
+            CNPJ,
+            adress,
+            role,
+            created_at,
+            updated_at
+        );
+
+        return store;
+    };
 }
 
+export interface StoresDB {
+    store_id: string;
+    store_name: string;
+    head_id: string;
+    email: string;
+    password: string;
+    CNPJ: number;
+    adress: string;
+    role: STORE_ROLE;
+    created_at: string;
+    updated_at: string;
+}
 export interface SignupDTO {
     storeName: string;
     email: string;
@@ -74,4 +116,9 @@ export interface SignupInput {
     role: STORE_ROLE;
     createdAt: string;
     updatedAt: string;
+}
+
+export interface LoginDTO {
+    email: string;
+    password: string;
 }

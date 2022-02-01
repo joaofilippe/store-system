@@ -1,22 +1,30 @@
 import express, { Request, Response } from 'express';
+import {  SignupDTO } from '../entities/Stores';
+import StoreBusiness from '../business/StoreBusiness';
+import Authenticator from '../services/Authenticator';
 
 export default class StoreController {
+
+    storeBusiness = new StoreBusiness()
+
     create = async (req: Request, res: Response) => {
         try {
-            const { storeName, email, password, role } = req.body;
-            const message = { storeName, email, password, role };
-            await console.log(message);
+            const { storeName, email, password, CNPJ, adress, roleInput} =
+                req.body;
+            
+            const signupDTO: SignupDTO ={
+                storeName,
+                email,
+                password,
+                CNPJ, adress, roleInput
+            }
 
-            res.send(message);
-        } catch (error) {
-            const objeto = {
-                storeName: 'storeName',
-                email: 'email',
-                password: 'password',
-                role: 'role',
-            };
-            console.log(error);
-            console.log(`Você não nos enviou o objeto ${objeto}`);
+            const token = await this.storeBusiness.signup(signupDTO)
+
+            res.send({token})
+
+        } catch (error: any) {
+            res.send(error.message)
         }
     };
 }

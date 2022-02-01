@@ -2,7 +2,7 @@ import BaseDatabase from '../BaseDatabase';
 
 const argv: string = process.argv[2];
 
-class StoreMigrations extends BaseDatabase {
+class StoresMigrations extends BaseDatabase {
     tableName: string = 'stores';
 
     destroy = async() => {
@@ -39,6 +39,7 @@ class StoreMigrations extends BaseDatabase {
                             .primary()
                             .notNullable();
                         table.string('email').notNullable();
+                        table.string('password')
                         table.bigInteger('CNPJ');
                         table.string('adress');
                         table
@@ -85,23 +86,23 @@ class StoreMigrations extends BaseDatabase {
 }
 
 const migrations = async (argv: string) => {
-    const storeMigrations = new StoreMigrations();
+    const storesMigrations = new StoresMigrations();
     if (argv === 'check') {
-        const check = await storeMigrations.check();
+        const check = await storesMigrations.check();
         if (check) {
             console.log(
-                `A tabela "${storeMigrations.tableName}" já existe em seu banco de dados.`
+                `A tabela "${storesMigrations.tableName}" já existe em seu banco de dados.`
             ); 
         } else {
             console.log(
-                `A tabela "${storeMigrations.tableName}" não existe em seu banco de dados.`
+                `A tabela "${storesMigrations.tableName}" não existe em seu banco de dados.`
             );
         }
-        storeMigrations.destroy()
+        storesMigrations.destroy()
     } else if (argv === 'create') {
-        await storeMigrations.create();
+        await storesMigrations.create();
     } else if (argv === 'drop') {
-        await storeMigrations.drop();
+        await storesMigrations.drop();
     } else {
         console.log('Parâmetros inválidos');
     }

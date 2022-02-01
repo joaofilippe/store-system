@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "migrations:store": "nodemon ./src/database/migrations/StoreMigrations.ts",
+    "migrations:stores": "nodemon ./src/database/migrations/StoresMigrations.ts",
     "migrations:products": "nodemon ./src/database/migrations/ProductsMigrations.ts",
     "dev": "nodemon ./src/index.ts",
     "build": "tsc",
@@ -29,6 +29,7 @@
     "jest": "^27.4.7",
     "jsonwebtoken": "^8.5.1",
     "knex": "^1.0.1",
+    "moment": "^2.29.1",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
     "ts-jest": "^27.1.3",

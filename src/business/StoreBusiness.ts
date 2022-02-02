@@ -1,7 +1,10 @@
 import moment from 'moment';
 import Stores, {
+    GetStoreByEmailDTO,
+    GetStoreByIdDTO,
     LoginDTO,
     SignupDTO,
+    StoresReturn,
     STORE_ROLE,
 } from '../entities/Stores';
 import { checkRole } from '../services/CheckRole';
@@ -114,6 +117,89 @@ export default class StoreBusiness {
 
             return token;
         } catch (error: any) {
+            throw new Error(error.sqlMessage || error.message);
+        }
+    };
+    getStoreById = async (input: GetStoreByIdDTO): Promise<StoresReturn> => {
+        try {
+            const { token, storeId } = input;
+            const tokenData = await this.authenticator.getTokenData(
+                token
+            );
+
+            const result = await this.database.selectById(storeId);
+
+            const store = result.getStore();
+
+            const DbStoreId = store.storeId;
+            const DbHeadId = store.headId;
+
+            const tokenStoreId = tokenData.storeId;
+            const tokenHeadId = tokenData.headId;
+            const tokenRole = tokenData.role;
+
+            if (tokenRole === STORE_ROLE.HEAD) {
+                if (DbHeadId !== tokenHeadId) {
+                    throw new Error(
+                        'Você não pode requisitar informações de outra rede de lojas.'
+                    );
+                } else {
+                    return store
+                }
+            } else if (tokenRole === STORE_ROLE.SUB){
+                if(DbStoreId !== tokenStoreId) {
+                    throw new Error('Você não pode requisitar informações de outras lojas.')
+                } else {
+                    return store
+                }
+            } else {
+                throw new Error('Por favor, verifique suas credenciais.')
+            }
+
+        } catch (error: any) {
+            throw new Error(error.sqlMessage || error.message);
+        }
+    };
+
+    
+    getStoreByEmail = async (input: GetStoreByEmailDTO): Promise<StoresReturn> => {
+        try {
+            const { token, email } = input;
+            const tokenData = await this.authenticator.getTokenData(
+                token
+            );
+
+            const result = await this.database.selectByEmail(email);
+
+            const store = result.getStore();
+
+            const DbStoreId = store.storeId;
+            const DbHeadId = store.headId;
+
+            const tokenStoreId = tokenData.storeId;
+            const tokenHeadId = tokenData.headId;
+            const tokenRole = tokenData.role;
+
+            if (tokenRole === STORE_ROLE.HEAD) {
+                if (DbHeadId !== tokenHeadId) {
+                    throw new Error(
+                        'Você não pode requisitar informações de outra rede de lojas.'
+                    );
+                } else {
+                    return store
+                }
+            } else if (tokenRole === STORE_ROLE.SUB){
+                if(DbStoreId !== tokenStoreId) {
+                    throw new Error('Você não pode requisitar informações de outras lojas.')
+                } else {
+                    return store
+                }
+            } else {
+                throw new Error('Por favor, verifique suas credenciais.')
+            }
+
+        } catch (error: any) {
+            console.log('Error no Business',error)
             throw new Error(error.sqlMessage || error.message);
         }
     };

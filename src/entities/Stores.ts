@@ -37,7 +37,7 @@ export default class Stores {
         const createdAt = this.createdAt;
         const updatedAt = this.updatedAt;
 
-        const store = {
+        const store : StoresReturn= {
             storeId,
             storeName,
             headId,
@@ -84,6 +84,18 @@ export default class Stores {
     };
 }
 
+export interface StoresReturn {
+    storeId: string;
+    storeName: string;
+    headId: string;
+    email: string;
+    password: string;
+    CNPJ: number;
+    adress: string;
+    role: STORE_ROLE;
+    createdAt: string;
+    updatedAt: string;
+}
 export interface StoresDB {
     store_id: string;
     store_name: string;
@@ -121,4 +133,13 @@ export interface SignupInput {
 export interface LoginDTO {
     email: string;
     password: string;
+}
+
+export interface GetStoreByIdDTO {
+    token: string;
+    storeId: string;
+}
+export interface GetStoreByEmailDTO {
+    token: string;
+    email: string;
 }

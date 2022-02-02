@@ -50,4 +50,40 @@ export default class StoreController {
             throw new Error(error.sqlMessage || error.message);
         }
     };
+
+    getStoreById = async (req: Request, res: Response) => {
+
+        try {
+            const token = req.headers.authorization as string;
+            const storeId = req.params.id
+    
+            const result = await this.storeBusiness.getStoreById({
+                token,
+                storeId,
+            });
+            
+            res.send(result)
+
+        } catch (error: any) {
+            res.send({message: error.message || error.sqlMessage})
+        }
+    };
+    getStoreByEmail = async (req: Request, res: Response) => {
+
+        try {
+            const token = req.headers.authorization as string;
+            const email = req.query.email as string
+    
+            const result = await this.storeBusiness.getStoreByEmail({
+                token,
+                email,
+            });
+            
+            res.send(result)
+
+        } catch (error: any) {
+            console.log('Error no Controller',error)
+            res.send({message: error.message || error.sqlMessage})
+        }
+    };
 }

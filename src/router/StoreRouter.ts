@@ -7,3 +7,5 @@ const storeController = new StoreController()
 
 storeRouter.post('/new', storeController.create )
 storeRouter.post('/login', storeController.login )
+storeRouter.get('/:id', storeController.getStoreById)
+storeRouter.get('/search/', storeController.getStoreByEmail)

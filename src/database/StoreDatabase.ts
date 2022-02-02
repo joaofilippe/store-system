@@ -49,12 +49,29 @@ export default class StoreDatabase extends BaseDatabase {
                 this.tableName
             )
                 .select()
-                .where({ email });
+                .where({ email: email});
 
             const storeFromDB = Stores.toStores(result[0]);
 
             return storeFromDB;
         } catch (error: any) {
+            throw new Error(error.sqlMessage || error.message);
+        }
+    };
+
+    selectById = async (storeId: string): Promise<Stores> => {
+        try {
+            const result: StoresDB[] = await this.connection(
+                this.tableName
+            )
+                .select()
+                .where({ store_id: storeId });
+
+            const storeFromDB = Stores.toStores(result[0]);
+
+            return storeFromDB;
+        } catch (error: any) {
+            console.log('Error no Database',error)
             throw new Error(error.sqlMessage || error.message);
         }
     };

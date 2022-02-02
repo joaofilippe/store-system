@@ -1,5 +1,7 @@
 import moment from 'moment';
 import Stores, {
+    CreateDTO,
+    EnrollSubDTO,
     GetStoreByEmailDTO,
     GetStoreByIdDTO,
     LoginDTO,
@@ -27,22 +29,12 @@ export default class StoreBusiness {
                 password,
                 CNPJ,
                 adress,
-                roleInput,
             } = input;
 
-            const storeId = this.idManager.generateId();
-
-            const role = checkRole(roleInput);
-
-            if (!role) {
-                throw new Error('Parâmetros inválidos');
-            }
-
-            const headId = this.idManager.headIdChecker(
-                role as STORE_ROLE,
-                storeId
-            );
-
+            const storeId = await this.idManager.generateId();
+            const headId = storeId
+            const role = STORE_ROLE.HEAD;
+            
             const hashedPassword = await this.hashManager.hash(
                 password
             );
@@ -67,8 +59,6 @@ export default class StoreBusiness {
 
             const storeInput = store.getStore();
 
-            console.log(storeInput);
-
             await this.database.insert(storeInput);
 
             const token: string = this.authenticator.generateToken({
@@ -84,17 +74,78 @@ export default class StoreBusiness {
         }
     };
 
+    create = async (input: CreateDTO) => {
+        try {
+            const {
+                token,
+                storeName,
+                email,
+                password,
+                CNPJ,
+                adress,
+            } = input;
+            
+            if(!token) {
+                throw new Error ('Você precisa estar logado como Matriz para cadastrar uma Filial.')
+            }
+            const role = STORE_ROLE.SUB;
+            
+            const createdAt = moment()
+                .format('YYYY-MM-DD hh:mm:ss')
+                .toString();
+            
+            const updatedAt = createdAt;
+            
+            const hashedPassword = await this.hashManager.hash(
+                password
+            );
+
+            const storeId = await this.idManager.generateId();
+            const tokenData = await this.authenticator.getTokenData(token)
+
+            const tokenRole = tokenData.role
+
+            if(tokenRole !== STORE_ROLE.HEAD){
+                throw new Error ('Você precisa estar logado como Matriz para cadastrar uma Filial.')
+            }
+
+            const headId = tokenData.headId
+            
+            const store = new Stores(
+                storeId,
+                storeName,
+                headId,
+                email,
+                hashedPassword,
+                CNPJ,
+                adress,
+                role as STORE_ROLE,
+                createdAt,
+                updatedAt
+            );
+
+            const storeInput = store.getStore();
+
+
+            await this.database.insert(storeInput);
+
+        } catch (error: any) {
+            throw new Error(error.message);
+        }
+    };
+
     login = async (input: LoginDTO) => {
         try {
             const { email, password } = input;
 
-            const storeFromDB = await this.database.selectByEmail(
+            const result = await this.database.selectByEmail(
                 email
             );
 
-            const store = storeFromDB.getStore();
+            const store = result.getStore();
 
             const { storeId, headId, role } = store;
+
 
             const passwordDB = store.password;
 
@@ -120,7 +171,51 @@ export default class StoreBusiness {
             throw new Error(error.sqlMessage || error.message);
         }
     };
-    getStoreById = async (input: GetStoreByIdDTO): Promise<StoresReturn> => {
+
+    enrollSub = async (input: EnrollSubDTO) => {
+        const { token, storeName, email, password, CNPJ, adress } =
+            input;
+
+        const storeId = await this.idManager.generateId();
+
+        const role = STORE_ROLE.SUB;
+
+        const tokenData = await this.authenticator.getTokenData(
+            token
+        );
+        const headId = tokenData.headId;
+
+        const hashedPassword = await this.hashManager.hash(password);
+
+        const createdAt = moment().format('YYYY-MM-DD hh:mm:ss');
+        const updatedAt = createdAt;
+
+        const stores = new Stores(
+            storeId,
+            storeName,
+            headId,
+            email,
+            hashedPassword,
+            CNPJ,
+            adress,
+            role,
+            createdAt,
+            updatedAt
+        );
+
+        const storeInputDB = stores.getStore();
+
+        await this.database.insert(storeInputDB);
+
+        try {
+        } catch (error: any) {
+            throw new Error('');
+        }
+    };
+
+    getStoreById = async (
+        input: GetStoreByIdDTO
+    ): Promise<StoresReturn> => {
         try {
             const { token, storeId } = input;
             const tokenData = await this.authenticator.getTokenData(
@@ -144,32 +239,36 @@ export default class StoreBusiness {
                         'Você não pode requisitar informações de outra rede de lojas.'
                     );
                 } else {
-                    return store
+                    return store;
                 }
-            } else if (tokenRole === STORE_ROLE.SUB){
-                if(DbStoreId !== tokenStoreId) {
-                    throw new Error('Você não pode requisitar informações de outras lojas.')
+            } else if (tokenRole === STORE_ROLE.SUB) {
+                if (DbStoreId !== tokenStoreId) {
+                    throw new Error(
+                        'Você não pode requisitar informações de outras lojas.'
+                    );
                 } else {
-                    return store
+                    return store;
                 }
             } else {
-                throw new Error('Por favor, verifique suas credenciais.')
+                throw new Error(
+                    'Por favor, verifique suas credenciais.'
+                );
             }
-
         } catch (error: any) {
             throw new Error(error.sqlMessage || error.message);
         }
     };
 
-    
-    getStoreByEmail = async (input: GetStoreByEmailDTO): Promise<StoresReturn> => {
+    getStoreByEmail = async (
+        input: GetStoreByEmailDTO
+    ): Promise<StoresReturn> => {
         try {
             const { token, email } = input;
+            const result = await this.database.selectByEmail(email);
+
             const tokenData = await this.authenticator.getTokenData(
                 token
             );
-
-            const result = await this.database.selectByEmail(email);
 
             const store = result.getStore();
 
@@ -186,20 +285,23 @@ export default class StoreBusiness {
                         'Você não pode requisitar informações de outra rede de lojas.'
                     );
                 } else {
-                    return store
+                    return store;
                 }
-            } else if (tokenRole === STORE_ROLE.SUB){
-                if(DbStoreId !== tokenStoreId) {
-                    throw new Error('Você não pode requisitar informações de outras lojas.')
+            } else if (tokenRole === STORE_ROLE.SUB) {
+                if (DbStoreId !== tokenStoreId) {
+                    throw new Error(
+                        'Você não pode requisitar informações de outras lojas.'
+                    );
                 } else {
-                    return store
+                    return store;
                 }
             } else {
-                throw new Error('Por favor, verifique suas credenciais.')
+                throw new Error(
+                    'Por favor, verifique suas credenciais.'
+                );
             }
-
         } catch (error: any) {
-            console.log('Error no Business',error)
+            console.log('Error no Business', error);
             throw new Error(error.sqlMessage || error.message);
         }
     };

@@ -24,6 +24,7 @@ export default class StoreDatabase extends BaseDatabase {
             const storeModel = new StoreModel(
                 storeId,
                 headId,
+                storeName,
                 email,
                 password,
                 CNPJ,
@@ -45,11 +46,10 @@ export default class StoreDatabase extends BaseDatabase {
 
     selectByEmail = async (email: string): Promise<Stores> => {
         try {
-            const result: StoresDB[] = await this.connection(
-                this.tableName
-            )
-                .select()
-                .where({ email: email});
+            console.log(email)
+            const result = await this.connection(this.tableName)
+                .where({email: email})
+
 
             const storeFromDB = Stores.toStores(result[0]);
 
@@ -71,8 +71,7 @@ export default class StoreDatabase extends BaseDatabase {
 
             return storeFromDB;
         } catch (error: any) {
-            console.log('Error no Database',error)
-            throw new Error(error.sqlMessage || error.message);
+            throw new Error(error);
         }
     };
 }

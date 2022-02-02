@@ -5,9 +5,9 @@ const argv: string = process.argv[2];
 class StoresMigrations extends BaseDatabase {
     tableName: string = 'stores';
 
-    destroy = async() => {
-        await this.connection.destroy()
-    }
+    destroy = async () => {
+        await this.connection.destroy();
+    };
 
     check = async () => {
         try {
@@ -36,10 +36,10 @@ class StoresMigrations extends BaseDatabase {
                             .notNullable();
                         table
                             .string('head_id')
-                            .primary()
                             .notNullable();
+                        table.string('store_name');
                         table.string('email').notNullable();
-                        table.string('password')
+                        table.string('password');
                         table.bigInteger('CNPJ');
                         table.string('adress');
                         table
@@ -92,13 +92,13 @@ const migrations = async (argv: string) => {
         if (check) {
             console.log(
                 `A tabela "${storesMigrations.tableName}" já existe em seu banco de dados.`
-            ); 
+            );
         } else {
             console.log(
                 `A tabela "${storesMigrations.tableName}" não existe em seu banco de dados.`
             );
         }
-        storesMigrations.destroy()
+        storesMigrations.destroy();
     } else if (argv === 'create') {
         await storesMigrations.create();
     } else if (argv === 'drop') {

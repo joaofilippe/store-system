@@ -4,10 +4,10 @@ const argv: string = process.argv[2];
 
 class ProductsMigrations extends BaseDatabase {
     tableName: string = 'products';
-    
-    destroy = async() => {
-        await this.connection.destroy()
-    }
+
+    destroy = async () => {
+        await this.connection.destroy();
+    };
 
     check = async () => {
         try {
@@ -36,8 +36,11 @@ class ProductsMigrations extends BaseDatabase {
                             .notNullable();
                         table.string('product_name').notNullable();
                         table.string('brand').notNullable();
-                        table.string('store_id').references('store_id').inTable('stores');
-                        table.string('head_id').references('head_id').inTable('stores');
+                        table
+                            .string('store_id')
+                            .references('store_id')
+                            .inTable('stores');
+                        table.string('head_id');
                         table.bigInteger('quantity');
                         table.decimal('price(R$)', 14, 2);
                         table.timestamp('created_at');
@@ -92,7 +95,7 @@ const migrations = async (argv: string) => {
             console.log(
                 `A tabela "${productsMigrations.tableName}" não existe em seu banco de dados.`
             );
-            productsMigrations.destroy()
+            productsMigrations.destroy();
         }
     } else if (argv === 'create') {
         await productsMigrations.create();

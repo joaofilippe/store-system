@@ -5,6 +5,7 @@ export default class StoreModel {
     constructor(
         private readonly store_id: string,
         private readonly head_id:string,
+        private readonly store_name: string,
         private readonly email: string,
         private readonly password: string,
         private readonly CNPJ: number,
@@ -12,13 +13,12 @@ export default class StoreModel {
         private readonly role: string,
         private readonly created_at: string,
         private readonly updated_at: string,
-    ){
-        this.role = STORE_ROLE.HEAD ? 'head': 'sub'
-    }
+    ){}
 
     getStoreModel = () => {
         const store_id = this.store_id
         const head_id = this.head_id
+        const store_name = this.store_name
         const email = this.email
         const password = this.password
         const CNPJ = this.CNPJ
@@ -29,6 +29,7 @@ export default class StoreModel {
 
         const storeModel = {
             store_id,
+            store_name,
             head_id,
             email,
             password,

@@ -1,7 +1,6 @@
 import express, { Request, Response } from 'express';
 import { CreateDTO, SignupDTO } from '../entities/Stores';
 import StoreBusiness from '../business/StoreBusiness';
-import Authenticator from '../services/Authenticator';
 
 export default class StoreController {
     storeBusiness = new StoreBusiness();
@@ -115,4 +114,17 @@ export default class StoreController {
             res.send({message: error.message || error.sqlMessage})
         }
     };
+
+    update = async (req: Request, res: Response) => {
+        try {
+
+            const {storeName, email, password, adress, role} = req.body
+            const token = req.headers.authorization
+
+            
+        } catch (error: any) {
+            console.log('Error no Controller',error)
+            res.send({message: error.message || error.sqlMessage})
+        }
+    }
 }

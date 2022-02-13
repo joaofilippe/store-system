@@ -109,7 +109,6 @@ export default class Stores {
             created_at,
             updated_at
         );
-        console.log({ store: store });
         return store;
     };
 }

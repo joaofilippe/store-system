@@ -1,4 +1,3 @@
-import express from 'express';
 import { app, server } from './app';
 import { storeRouter } from './router/StoreRouter';
 

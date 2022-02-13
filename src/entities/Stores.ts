@@ -46,7 +46,9 @@ export default class Stores {
             this.role = STORE_ROLE.HEAD;
         } else if (role === 'sub') {
             this.role = STORE_ROLE.SUB;
-        } else {
+        } else if (role === STORE_ROLE.HEAD || role === STORE_ROLE.SUB){
+            this.role = role
+        }else {
             throw new Error(
                 'Você deve informar os parâmetros "head" ou "sub".'
             );

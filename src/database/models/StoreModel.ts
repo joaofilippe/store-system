@@ -41,4 +41,6 @@ export default class StoreModel {
         }
         return storeModel
     }
+
+    
 }

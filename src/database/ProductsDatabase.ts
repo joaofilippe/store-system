@@ -3,8 +3,8 @@ import { SignupInput } from '../entities/Stores';
 import BaseDatabase from './BaseDatabase';
 import StoreModel from './models/StoreModel';
 
-export default class StoreDatabase extends BaseDatabase {
-    tableName = 'stores';
+export default class ProductsDatabase extends BaseDatabase {
+    tableName = 'products';
 
     insert = async (input: SignupInput) => {
         try {
@@ -36,20 +36,18 @@ export default class StoreDatabase extends BaseDatabase {
 
             const storeInputDB = storeModel.getStoreModel();
 
-            await this.connection(this.tableName).insert(
-                storeInputDB
-            );
+            await this.connection(this.tableName).insert(storeInputDB);
         } catch (error: any) {
             throw new Error(error.sqlMessage || error.message);
         }
     };
 
+    
     selectByEmail = async (email: string): Promise<Stores> => {
         try {
-            console.log(email)
-            const result = await this.connection(this.tableName)
-                .where({email: email})
-
+            const result = await this.connection(this.tableName).where({
+                email: email,
+            });
 
             const storeFromDB = Stores.toStores(result[0]);
 
@@ -61,9 +59,7 @@ export default class StoreDatabase extends BaseDatabase {
 
     selectById = async (storeId: string): Promise<Stores> => {
         try {
-            const result: StoresDB[] = await this.connection(
-                this.tableName
-            )
+            const result: StoresDB[] = await this.connection(this.tableName)
                 .select()
                 .where({ store_id: storeId });
 

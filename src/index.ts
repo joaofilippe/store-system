@@ -1,5 +1,5 @@
 import { app, server } from './app';
-import { storeRouter } from './router/StoreRouter';
+import { storeRouter } from './router/StoresRouter';
 
 app.use('/stores', storeRouter);
 

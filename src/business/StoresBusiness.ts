@@ -13,9 +13,9 @@ import { checkRole } from '../services/CheckRole';
 import HashManager from '../services/HashManager';
 import IdManager from '../services/IdManager';
 import Authenticator from '../services/Authenticator';
-import StoreDatabase from '../database/StoreDatabase';
+import StoreDatabase from '../database/StoresDatabase';
 
-export default class StoreBusiness {
+export default class StoresBusiness {
     hashManager = new HashManager();
     idManager = new IdManager();
     authenticator = new Authenticator();
@@ -23,25 +23,15 @@ export default class StoreBusiness {
 
     signup = async (input: SignupDTO): Promise<string> => {
         try {
-            const {
-                storeName,
-                email,
-                password,
-                CNPJ,
-                adress,
-            } = input;
+            const { storeName, email, password, CNPJ, adress } = input;
 
             const storeId = await this.idManager.generateId();
-            const headId = storeId
+            const headId = storeId;
             const role = STORE_ROLE.HEAD;
-            
-            const hashedPassword = await this.hashManager.hash(
-                password
-            );
 
-            const createdAt = moment()
-                .format('YYYY-MM-DD hh:mm:ss')
-                .toString();
+            const hashedPassword = await this.hashManager.hash(password);
+
+            const createdAt = moment().format('YYYY-MM-DD hh:mm:ss').toString();
             const updatedAt = createdAt;
 
             const store = new Stores(
@@ -76,41 +66,34 @@ export default class StoreBusiness {
 
     create = async (input: CreateDTO) => {
         try {
-            const {
-                token,
-                storeName,
-                email,
-                password,
-                CNPJ,
-                adress,
-            } = input;
-            
-            if(!token) {
-                throw new Error ('Você precisa estar logado como Matriz para cadastrar uma Filial.')
+            const { token, storeName, email, password, CNPJ, adress } = input;
+
+            if (!token) {
+                throw new Error(
+                    'Você precisa estar logado como Matriz para cadastrar uma Filial.'
+                );
             }
             const role = STORE_ROLE.SUB;
-            
-            const createdAt = moment()
-                .format('YYYY-MM-DD hh:mm:ss')
-                .toString();
-            
+
+            const createdAt = moment().format('YYYY-MM-DD hh:mm:ss').toString();
+
             const updatedAt = createdAt;
-            
-            const hashedPassword = await this.hashManager.hash(
-                password
-            );
+
+            const hashedPassword = await this.hashManager.hash(password);
 
             const storeId = await this.idManager.generateId();
-            const tokenData = await this.authenticator.getTokenData(token)
+            const tokenData = await this.authenticator.getTokenData(token);
 
-            const tokenRole = tokenData.role
+            const tokenRole = tokenData.role;
 
-            if(tokenRole !== STORE_ROLE.HEAD){
-                throw new Error ('Você precisa estar logado como Matriz para cadastrar uma Filial.')
+            if (tokenRole !== STORE_ROLE.HEAD) {
+                throw new Error(
+                    'Você precisa estar logado como Matriz para cadastrar uma Filial.'
+                );
             }
 
-            const headId = tokenData.headId
-            
+            const headId = tokenData.headId;
+
             const store = new Stores(
                 storeId,
                 storeName,
@@ -126,9 +109,7 @@ export default class StoreBusiness {
 
             const storeInput = store.getStore();
 
-
             await this.database.insert(storeInput);
-
         } catch (error: any) {
             throw new Error(error.message);
         }
@@ -138,14 +119,17 @@ export default class StoreBusiness {
         try {
             const { email, password } = input;
 
-            const result = await this.database.selectByEmail(
-                email
-            );
+            const result = await this.database.selectByEmail(email);
+
+            if (!result) {
+                throw new Error(
+                    `Por favor, verifique o "email" e a "senha" informados.`
+                );
+            }
 
             const store = result.getStore();
 
             const { storeId, headId, role } = store;
-
 
             const passwordDB = store.password;
 
@@ -173,16 +157,13 @@ export default class StoreBusiness {
     };
 
     enrollSub = async (input: EnrollSubDTO) => {
-        const { token, storeName, email, password, CNPJ, adress } =
-            input;
+        const { token, storeName, email, password, CNPJ, adress } = input;
 
         const storeId = await this.idManager.generateId();
 
         const role = STORE_ROLE.SUB;
 
-        const tokenData = await this.authenticator.getTokenData(
-            token
-        );
+        const tokenData = await this.authenticator.getTokenData(token);
         const headId = tokenData.headId;
 
         const hashedPassword = await this.hashManager.hash(password);
@@ -213,14 +194,10 @@ export default class StoreBusiness {
         }
     };
 
-    getStoreById = async (
-        input: GetStoreByIdDTO
-    ): Promise<StoresReturn> => {
+    getStoreById = async (input: GetStoreByIdDTO): Promise<StoresReturn> => {
         try {
             const { token, storeId } = input;
-            const tokenData = await this.authenticator.getTokenData(
-                token
-            );
+            const tokenData = await this.authenticator.getTokenData(token);
 
             const result = await this.database.selectById(storeId);
 
@@ -250,9 +227,7 @@ export default class StoreBusiness {
                     return store;
                 }
             } else {
-                throw new Error(
-                    'Por favor, verifique suas credenciais.'
-                );
+                throw new Error('Por favor, verifique suas credenciais.');
             }
         } catch (error: any) {
             throw new Error(error.sqlMessage || error.message);
@@ -266,9 +241,7 @@ export default class StoreBusiness {
             const { token, email } = input;
             const result = await this.database.selectByEmail(email);
 
-            const tokenData = await this.authenticator.getTokenData(
-                token
-            );
+            const tokenData = await this.authenticator.getTokenData(token);
 
             const store = result.getStore();
 
@@ -296,9 +269,7 @@ export default class StoreBusiness {
                     return store;
                 }
             } else {
-                throw new Error(
-                    'Por favor, verifique suas credenciais.'
-                );
+                throw new Error('Por favor, verifique suas credenciais.');
             }
         } catch (error: any) {
             console.log('Error no Business', error);

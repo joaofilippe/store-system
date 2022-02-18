@@ -105,11 +105,9 @@ export default class StoresBusiness {
                 role as STORE_ROLE,
                 createdAt,
                 updatedAt
-            );
+            ).getStore();
 
-            const storeInput = store.getStore();
-
-            await this.database.insert(storeInput);
+            await this.database.insert(store);
         } catch (error: any) {
             throw new Error(error.message);
         }
@@ -171,7 +169,7 @@ export default class StoresBusiness {
         const createdAt = moment().format('YYYY-MM-DD hh:mm:ss');
         const updatedAt = createdAt;
 
-        const stores = new Stores(
+        const store = new Stores(
             storeId,
             storeName,
             headId,
@@ -182,11 +180,9 @@ export default class StoresBusiness {
             role,
             createdAt,
             updatedAt
-        );
+        ).getStore();
 
-        const storeInputDB = stores.getStore();
-
-        await this.database.insert(storeInputDB);
+        await this.database.insert(store);
 
         try {
         } catch (error: any) {

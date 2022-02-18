@@ -1,4 +1,6 @@
-export default class Products {
+import Products from '../../entities/Products';
+
+export default class ProductsModel {
     private readonly product_id: string;
     private readonly product_name: string;
     private readonly brand: string;
@@ -30,7 +32,7 @@ export default class Products {
         this.updated_at = updated_at;
     }
 
-    getProductModel() : ProductModel {
+    getProductModel(): ProductModel {
         const product_id = this.product_id;
         const product_name = this.product_name;
         const brand = this.brand;
@@ -41,7 +43,7 @@ export default class Products {
         const created_at = this.created_at;
         const updated_at = this.updated_at;
 
-        const productModel : ProductModel = {
+        const productModel: ProductModel = {
             product_id,
             product_name,
             brand,
@@ -55,6 +57,22 @@ export default class Products {
 
         return productModel;
     }
+
+    static toProducts(input: any) {
+        const product = new Products(
+            input.product_id,
+            input.product_name,
+            input.brand,
+            input.store_id,
+            input.head_id,
+            input.quantity,
+            input.price,
+            input.created_at,
+            input.updated_at
+        );
+
+        return product
+    }
 }
 
 export interface ProductModel {
@@ -66,5 +84,13 @@ export interface ProductModel {
     quantity: string;
     price: number;
     created_at: string;
+    updated_at: string;
+}
+
+export interface ProductUpdate {
+    product_name: string;
+    brand: string;
+    quantity: string;
+    price: number;
     updated_at: string;
 }

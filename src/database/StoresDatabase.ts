@@ -8,35 +8,22 @@ export default class StoresDatabase extends BaseDatabase {
 
     insert = async (input: SignupInput) => {
         try {
-            const {
-                storeId,
-                storeName,
-                headId,
-                email,
-                password,
-                CNPJ,
-                adress,
-                role,
-                createdAt,
-                updatedAt,
-            }: SignupInput = input;
-
+           
             const storeModel = new StoreModel(
-                storeId,
-                headId,
-                storeName,
-                email,
-                password,
-                CNPJ,
-                adress,
-                role,
-                createdAt,
-                updatedAt
-            );
+                input.storeId,
+                input.headId,
+                input.storeName,
+                input.email,
+                input.password,
+                input.CNPJ,
+                input.adress,
+                input.role,
+                input.createdAt,
+                input.updatedAt
+            ).getStoreModel();
 
-            const storeInputDB = storeModel.getStoreModel();
 
-            await this.connection(this.tableName).insert(storeInputDB);
+            await this.connection(this.tableName).insert(storeModel);
         } catch (error: any) {
             throw new Error(error.sqlMessage || error.message);
         }

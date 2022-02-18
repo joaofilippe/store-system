@@ -76,3 +76,13 @@ export interface ProductInputDTO {
     price: number;
     token: string;
 }
+
+export interface GetProductsByStoreDTO{
+    token: string;
+    storeId: string;
+}
+
+export interface GetProductsByIdDTO{
+    token: string;
+    productId: string;
+}

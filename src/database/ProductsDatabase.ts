@@ -59,18 +59,14 @@ export default class ProductsDatabase extends BaseDatabase {
         }
     }
 
-    
+
     async getById(input: string) {
         try {
             const result = await this.connection(this.tableName)
                 .select()
                 .where({ id: input });
 
-            const products = result.map((product) =>
-                ProductsModel.toProducts(product)
-            );
-
-            return products
+            const product = new 
 
         } catch (error: any) {
             throw new Error(error.message || error.sqlMessage);

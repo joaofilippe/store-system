@@ -3,53 +3,38 @@ import { SignupInput } from '../entities/Stores';
 import BaseDatabase from './BaseDatabase';
 import StoreModel from './models/StoreModel';
 
-export default class StoreDatabase extends BaseDatabase {
+export default class StoresDatabase extends BaseDatabase {
     tableName = 'stores';
 
     insert = async (input: SignupInput) => {
         try {
-            const {
-                storeId,
-                storeName,
-                headId,
-                email,
-                password,
-                CNPJ,
-                adress,
-                role,
-                createdAt,
-                updatedAt,
-            }: SignupInput = input;
-
+           
             const storeModel = new StoreModel(
-                storeId,
-                headId,
-                storeName,
-                email,
-                password,
-                CNPJ,
-                adress,
-                role,
-                createdAt,
-                updatedAt
-            );
+                input.storeId,
+                input.headId,
+                input.storeName,
+                input.email,
+                input.password,
+                input.CNPJ,
+                input.adress,
+                input.role,
+                input.createdAt,
+                input.updatedAt
+            ).getStoreModel();
 
-            const storeInputDB = storeModel.getStoreModel();
 
-            await this.connection(this.tableName).insert(
-                storeInputDB
-            );
+            await this.connection(this.tableName).insert(storeModel);
         } catch (error: any) {
             throw new Error(error.sqlMessage || error.message);
         }
     };
 
+    
     selectByEmail = async (email: string): Promise<Stores> => {
         try {
-            console.log(email)
-            const result = await this.connection(this.tableName)
-                .where({email: email})
-
+            const result = await this.connection(this.tableName).where({
+                email: email,
+            });
 
             const storeFromDB = Stores.toStores(result[0]);
 
@@ -61,9 +46,7 @@ export default class StoreDatabase extends BaseDatabase {
 
     selectById = async (storeId: string): Promise<Stores> => {
         try {
-            const result: StoresDB[] = await this.connection(
-                this.tableName
-            )
+            const result: StoresDB[] = await this.connection(this.tableName)
                 .select()
                 .where({ store_id: storeId });
 

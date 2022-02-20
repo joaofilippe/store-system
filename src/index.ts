@@ -1,6 +1,7 @@
 import { app, server } from './app';
-import { storeRouter } from './router/StoresRouter';
+import { storesRouter } from './router/StoresRouter';
+import { productsRouter } from './router/ProductsRouter';
 
-app.use('/stores', storeRouter);
-
+app.use('/stores', storesRouter);
+app.use('/products', productsRouter);
 server;

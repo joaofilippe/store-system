@@ -1,6 +1,9 @@
-import { Product } from '../entities/Products';
+import Products, { Product } from '../entities/Products';
 import BaseDatabase from './BaseDatabase';
-import ProductsModel, { ProductUpdate } from './models/ProductsModel';
+import ProductsModel, {
+    ProductModel,
+    ProductUpdate,
+} from './models/ProductsModel';
 
 export default class ProductsDatabase extends BaseDatabase {
     tableName = 'products';
@@ -20,8 +23,7 @@ export default class ProductsDatabase extends BaseDatabase {
             );
 
             const product = productModel.getProductModel();
-
-            await this.connection(this.tableName).insert(product);
+            await this.connection.insert(product).into(this.tableName);
         } catch (error: any) {
             throw new Error(error.message || error.sqlMessage);
         }
@@ -46,28 +48,39 @@ export default class ProductsDatabase extends BaseDatabase {
         try {
             const result = await this.connection(this.tableName)
                 .select()
-                .where({ storeId: input });
+                .where({ store_id: input });
 
             const products = result.map((product) =>
-                ProductsModel.toProducts(product)
+                ProductsModel.toProducts(product).getProduct()
             );
 
-            return products
+            return products;
 
         } catch (error: any) {
             throw new Error(error.message || error.sqlMessage);
         }
     }
 
-
-    async getById(input: string) {
+    async getById(input: string): Promise<Products> {
         try {
             const result = await this.connection(this.tableName)
                 .select()
-                .where({ id: input });
+                .where({ product_id: input });
 
-            const product = new 
-
+            const productDB: ProductModel = result[0];
+            const product = new Products(
+                productDB.product_id,
+                productDB.product_name,
+                productDB.brand,
+                productDB.store_id,
+                productDB.head_id,
+                productDB.quantity,
+                productDB.price,
+                productDB.created_at,
+                productDB.updated_at
+            );
+            console.log('product: ', product)
+            return product;
         } catch (error: any) {
             throw new Error(error.message || error.sqlMessage);
         }

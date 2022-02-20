@@ -50,7 +50,8 @@ export default class ProductsBussiness {
                 updatedAt
             );
 
-            const produtcInput = product.getProduct();
+            const productInput = product.getProduct();
+            await this.database.create(productInput);
 
             return productId;
         } catch (error: any) {
@@ -87,7 +88,6 @@ export default class ProductsBussiness {
         }
     }
 
-
     async getById(input: GetProductsByIdDTO) {
         try {
             const { token, productId } = input;
@@ -111,7 +111,10 @@ export default class ProductsBussiness {
                 );
             }
 
-            return result;
+            
+            const product = result.getProduct()
+
+            return product;
         } catch (error: any) {
             throw new Error(error.message);
         }

@@ -119,8 +119,8 @@ PORT = [porta do servidor Express]
 - Para checar se as tabelas já constam em seu banco de dados, deve-se executar os seguintes scripts:
   
   ```
-  npm run migrations:users check
-  npm run migrations:posts check
+  npm run migrations:stores check
+  npm run migrations:products check
   ```
 
 --------------
@@ -151,7 +151,7 @@ Para rodar os testes, o seguinte script deve ser executado:
 
 #### 2 - Stores URL
 
-> <http://localhost:3006/stores/>
+<http://localhost:3006/stores/>
 
 1. `Signup`: <http://localhost:3006/stores/signup>
   
@@ -189,6 +189,7 @@ Para rodar os testes, o seguinte script deve ser executado:
   - Body (JSON):
 
     ```
+    
     {
         "storeName": "name {String}";
         "email": "email {String}";
@@ -196,18 +197,19 @@ Para rodar os testes, o seguinte script deve ser executado:
         "CNPJ": "CNPJ {Number}",
         "adress": "adress {String}"
      } 
+     
     ```
   
   - Headers:
 
-  ```
+```
     {
         Authorization: 
             {
                 "token": jwtToken
             }
         } 
-    ```
+ ``` 
   
   - Return:
 
@@ -293,6 +295,7 @@ Para rodar os testes, o seguinte script deve ser executado:
 
 ###
 
+--------------
 ### Autor
 
 <img title="" src="./assets/Thumb.png" alt="Thumb.png" data-align="inline" width="70">  

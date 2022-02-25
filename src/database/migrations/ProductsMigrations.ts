@@ -42,7 +42,7 @@ class ProductsMigrations extends BaseDatabase {
                             .inTable('stores');
                         table.string('head_id');
                         table.bigInteger('quantity');
-                        table.decimal('price(R$)', 14, 2);
+                        table.decimal('price', 14, 2);
                         table.timestamp('created_at');
                         table.timestamp('updated_at');
                     }

@@ -1,4 +1,3 @@
-
 ![Logo.png](./assets/Logo.png)
 
 # STORELAB
@@ -145,7 +144,7 @@ Para rodar os testes, o seguinte script deve ser executado:
 
 #### 1- URL Base
 
-- <http://localhost:3006/>
+<http://localhost:3006/>
 
 > NOTA: O número da porta poderá ser substituído pela porta indicada no arquivo `.env`, caso não seja indicada, a API atribuirá a porta 3006.
 
@@ -154,83 +153,82 @@ Para rodar os testes, o seguinte script deve ser executado:
 <http://localhost:3006/stores/>
 
 1. `Signup`: <http://localhost:3006/stores/signup>
-  
-  - Method: `POST`;
-  
-  - Body (JSON):
-
-    ```
-    {
-        "storeName": "name {String}";
-        "email": "email {String}";
-        "password" : "password {String}",
-        "CNPJ": "CNPJ {Number}",
-        "adress": "adress {String}"
-     } 
-    ```
-  
-  - No Headers;
-  
-  - Return:
-
-    ```
-    {
-        message: 'Sucesso',
-        token: jwtToken
-    }
-    ```
-
-  - Será criada uma loja matriz (role = 'head') no banco de dados, responsável por gerenciar a rede de lojas.
-  -----
-2. `Create`: <http://localhost:3006/stores/create>
-  
-  - Method: `POST`;
-  
-  - Body (JSON):
-
-    ```
-    
-    {
-        "storeName": "name {String}";
-        "email": "email {String}";
-        "password" : "password {String}",
-        "CNPJ": "CNPJ {Number}",
-        "adress": "adress {String}"
-     } 
+   
+   - Method: `POST`;
+   
+   - Body (JSON):
      
-    ```
-  
-  - Headers:
-
-```
-    {
-        Authorization: 
-            {
-                "token": jwtToken
-            }
-        } 
- ``` 
-  
-  - Return:
-
-    ```
-    {
+     ```
+     {
+        "storeName": "name {String}";
+        "email": "email {String}";
+        "password" : "password {String}",
+        "CNPJ": "CNPJ {Number}",
+        "adress": "adress {String}"
+     } 
+     ```
+   
+   - No Headers;
+   
+   - Return:
+     
+     ```
+     {
         message: 'Sucesso',
         token: jwtToken
-    }
-    ```
+     }
+     ```
+   
+   - Será criada uma loja matriz (role = 'head') no banco de dados, responsável por gerenciar a rede de lojas.
+   
+   -----
 
-  - Será criada uma loja matriz (role = 'head') no banco de dados, responsável por gerenciar a rede de lojas.
+2. `CreateSubStore`: <http://localhost:3006/stores/create>
+   
+   - Method: `POST`;
+   
+   - Body (JSON):
+     
+     ```
+     {
+        "storeName": "name {String}";
+        "email": "email {String}";
+        "password" : "password {String}",
+        "CNPJ": "CNPJ {Number}",
+        "adress": "adress {String}"
+     } 
+     ```
+   
+   - Headers:
+     
+     ```
+     {
+         Authorization: {
+             "token": jwtToken
+         }
+     }
+     ```
+     - Somente lojas matrizes (role: "head") poderão utilizar esse endpoint.
+   - Return:
 
+      ```
+      {
+          message: 'Sucesso',
+          token: jwtToken
+      }
+      ```
+
+- Será criada uma loja filial (role: 'sub') no banco de dados, responsável por gerenciar a rede de lojas.
+  
+------------
 - `Login`: <http://localhost:3006/users/login>
   
   - Method: `POST`;
   
   - Body (JSON):
-
+    
     ```
     {
-        "name": "name";
         "email": "email";
         "password" : "password"
      } 
@@ -239,7 +237,7 @@ Para rodar os testes, o seguinte script deve ser executado:
   - No Headers;
   
   - Return:
-
+    
     ```
     {
         "message": "Sucess",
@@ -247,26 +245,27 @@ Para rodar os testes, o seguinte script deve ser executado:
     }
     ```
 
-#### 3 - Posts URL
+#### 3 - Products URL
 
-- <http://localhost:3006/posts/>
+- <http://localhost:3006/producs/>
 
-- `Create Post`: <http://localhost:3006/posts/create>
+- `Create Product`: <http://localhost:3006/posts/create>
   
   - Method: `POST`;
   
   - Body (JSON):
-
+    
     ```
     {
-        "photo": "photo_url";
-        "description": "text";
-        "type" : "event/normal"
+        "productName": "string";
+        "brand": "string",
+        "quantity" : int,
+        "price" : float,
      } 
     ```
   
   - Headers:
-
+    
     ```
     {
         Authorization: 
@@ -276,14 +275,14 @@ Para rodar os testes, o seguinte script deve ser executado:
         } 
     ```
 
-- `Get By Id`: <http://localhost:3006/posts/login/:id>
+- `Get By Id`: <http://localhost:3006/products/:id>
   
   - Method: `GET`;
   
   - Params(`id`): post id  
   
   - Headers:
-
+    
     ```
     {
         Authorization: 
@@ -293,9 +292,10 @@ Para rodar os testes, o seguinte script deve ser executado:
         } 
     ```
 
-###
+### 
 
 --------------
+
 ### Autor
 
 <img title="" src="./assets/Thumb.png" alt="Thumb.png" data-align="inline" width="70">  

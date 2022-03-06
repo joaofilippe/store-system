@@ -99,4 +99,19 @@ export default class ProductsController {
       res.send(error.message);
     }
   }
+
+  async delete(req: Request, res: Response) {
+    try {
+      const database = new ProductsDatabase();
+      const business = new ProductsBussiness(database);
+      const token = req.headers.authorization as string
+      const productId = req.params.id as string
+
+      await business.delete(productId, token)
+
+      res.send({ message: 'Loja deletada com sucesso!' })
+    } catch (error: any) {
+      res.send(error.message)
+    }
+  }
 }

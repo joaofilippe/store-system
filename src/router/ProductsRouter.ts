@@ -8,4 +8,5 @@ productsRouter.post('/create', productsController.create)
 productsRouter.get('/search/', productsController.getByStore)
 productsRouter.get('/:id', productsController.getById)
 productsRouter.put('/:id', productsController.update)
+productsRouter.delete('/:id', productsController.delete)
 

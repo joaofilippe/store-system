@@ -1,4 +1,4 @@
-import { STORE_ROLE } from '../entities/Stores';
+import { STORE_ROLE } from '../models/Store';
 export function checkRole(input: string): STORE_ROLE | undefined {
     let role: STORE_ROLE;
 

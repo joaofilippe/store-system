@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { CreateDTO, SignupDTO } from '../entities/Stores';
+import { CreateDTO, SignupDTO } from '../models/Store';
 import StoresBusiness from '../business/StoresBusiness';
 
 export default class StoresController {

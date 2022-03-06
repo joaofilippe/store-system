@@ -56,9 +56,15 @@ export default class StoresDatabase extends BaseDatabase {
 
   async update(store: StoreUpdateModel, store_id: string) {
     try {
-      await this.connection(this.tableName)
-        .update(store)
-        .where(store_id)
+      await this.connection(this.tableName).update(store).where(store_id)
+    } catch (error: any) {
+      throw new Error(error.sqlMessage || error.message)
+    }
+  }
+
+  async delete(store_id: string) {
+    try {
+      this.connection(this.tableName).delete().where(store_id)
     } catch (error: any) {
       throw new Error(error.sqlMessage || error.message)
     }

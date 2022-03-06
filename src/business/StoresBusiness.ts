@@ -297,8 +297,22 @@ export default class StoresBusiness {
         updated_at: updatedAt,
       }
 
-    await this.database.update(store, input.storeId)
+      await this.database.update(store, input.storeId)
+    } catch (error: any) {
+      throw new Error(error.sqlMessage || error.message)
+    }
+  }
 
+  async delete(storeId: string, token: string) {
+    try {
+      const tokenData = await this.authenticator.getTokenData(token)
+      const tokenStoreId = tokenData.storeId
+
+      if (!(tokenStoreId === storeId)) {
+        throw new Error('Você não pode deletar outra loja.')
+      }
+
+      await this.database.delete(storeId)
     } catch (error: any) {
       throw new Error(error.sqlMessage || error.message)
     }

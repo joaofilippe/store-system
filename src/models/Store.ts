@@ -1,4 +1,4 @@
-export default class Stores {
+export default class Store {
   private readonly storeId: string
   private readonly storeName: string
   private readonly headId: string
@@ -97,7 +97,7 @@ export default class Stores {
     return storeModel
   }
 
-  static toStores = (input: StoresDB): Stores => {
+  static toStores = (input: StoresDB): Store => {
     const {
       store_id,
       store_name,
@@ -111,7 +111,7 @@ export default class Stores {
       updated_at,
     }: StoresDB = input
 
-    const store = new Stores(
+    const store = new Store(
       store_id,
       store_name,
       head_id,

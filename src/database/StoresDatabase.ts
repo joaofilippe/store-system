@@ -7,7 +7,7 @@ export default class StoresDatabase extends BaseDatabase {
 
   insert = async (input: SignupInput) => {
     try {
-      const storeModel = new StoreModel(
+      const storeModel = new Stores(
         input.storeId,
         input.headId,
         input.storeName,

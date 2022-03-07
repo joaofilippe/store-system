@@ -1,25 +1,14 @@
 import Stores, { StoresDB, StoreUpdateModel } from '../models/Store'
-import { SignupInput } from '../models/Store'
+import Store, { SignupInput } from '../models/Store'
 import BaseDatabase from './BaseDatabase'
 
 export default class StoresDatabase extends BaseDatabase {
   tableName = 'stores'
 
-  insert = async (input: SignupInput) => {
+  insert = async (store: Store) => {
     try {
-      const storeModel = new Stores(
-        input.storeId,
-        input.headId,
-        input.storeName,
-        input.email,
-        input.password,
-        input.CNPJ,
-        input.adress,
-        input.role,
-        input.createdAt,
-        input.updatedAt,
-      ).getStoreModel()
-
+      const storeModel = store.getStoreModel()
+      console.log(storeModel)
       await this.connection(this.tableName).insert(storeModel)
     } catch (error: any) {
       throw new Error(error.sqlMessage || error.message)
@@ -40,12 +29,11 @@ export default class StoresDatabase extends BaseDatabase {
     }
   }
 
-  selectById = async (storeId: string): Promise<Stores> => {
+  async selectById(store_id: string): Promise<Stores> {
     try {
       const result: StoresDB[] = await this.connection(this.tableName)
         .select()
-        .where({ store_id: storeId })
-
+        .where({store_id})
       const storeFromDB = Stores.toStores(result[0])
 
       return storeFromDB
@@ -54,11 +42,12 @@ export default class StoresDatabase extends BaseDatabase {
     }
   }
 
-  async update(store: StoreUpdateModel, store_id: string) {
+  async update(store: any, store_id: string) {
     try {
-      await this.connection(this.tableName).update(store).where(store_id)
+      console.log('DATABASE:', store, store_id)
+      await this.connection(this.tableName).update(store).where({store_id})
     } catch (error: any) {
-      throw new Error(error.sqlMessage || error.message)
+      throw new Error(`Error na Database: ${error.sqlMessage || error.message}`)
     }
   }
 

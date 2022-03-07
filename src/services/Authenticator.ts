@@ -7,7 +7,7 @@ dotenv.config();
 export default class Authenticator {
     generateToken = (payload: AuthenticationData): string => {
         return jwt.sign(payload, process.env.JWT_KEY as string, {
-            expiresIn: '24min',
+            expiresIn: '240min',
         });
     };
 

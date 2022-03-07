@@ -11,11 +11,11 @@ import Stores, {
   StoreUpdateModel,
   STORE_ROLE,
 } from '../models/Store'
-import { checkRole } from '../services/CheckRole'
 import HashManager from '../services/HashManager'
 import IdManager from '../services/IdManager'
 import Authenticator from '../services/Authenticator'
 import StoreDatabase from '../database/StoresDatabase'
+import Store from '../models/Store'
 
 export default class StoresBusiness {
   hashManager = new HashManager()
@@ -48,10 +48,7 @@ export default class StoresBusiness {
         createdAt,
         updatedAt,
       )
-
-      const storeInput = store.getStore()
-
-      await this.database.insert(storeInput)
+      await this.database.insert(store)
 
       const token: string = this.authenticator.generateToken({
         storeId,
@@ -96,7 +93,7 @@ export default class StoresBusiness {
 
       const headId = tokenData.headId
 
-      const store = new Stores(
+      const store = new Store(
         storeId,
         storeName,
         headId,
@@ -107,7 +104,7 @@ export default class StoresBusiness {
         role as STORE_ROLE,
         createdAt,
         updatedAt,
-      ).getStore()
+      )
 
       await this.database.insert(store)
     } catch (error: any) {
@@ -180,7 +177,7 @@ export default class StoresBusiness {
       role,
       createdAt,
       updatedAt,
-    ).getStore()
+    )
 
     await this.database.insert(store)
 
@@ -273,31 +270,45 @@ export default class StoresBusiness {
     }
   }
 
-  async update(input: StoreUpdateDTO) {
+  async update(input: any, storeId: string, token: string) {
     try {
-      const result = this.database.selectById(input.storeId)
+      const updatedAt = moment().format('YYYY-MM-DD hh:mm:ss').toString()
+      const result = await this.database.selectById(storeId)
+      const storeFromDB = result.getStore()
+
+      const tokenData = await this.authenticator.getTokenData(token)
+      const tokenStoreId = tokenData.storeId
+      const tokenHeadId = tokenData.headId
+      const tokenRole = tokenData.role
       if (!result) {
         throw new Error('A loja informada não consta no banco de dados!!!')
       }
 
-      const tokenData = this.authenticator.getTokenData(input.token)
-      const storeIdToken = tokenData.storeId
-
-      if (!(storeIdToken === input.storeId)) {
-        throw new Error('Você não pode editar uma loja diferente da sua.')
+      if (!(tokenStoreId === storeFromDB.storeId)) {
+        if (!(tokenHeadId === storeFromDB.headId)) {
+          throw new Error(
+            'Somente as próprias lojas ou suas matrizes podem alterar seus registros.',
+          )
+        }
       }
 
-      const updatedAt = moment().format('YYYY-MM-DD hh:mm:ss').toString()
-      const store: StoreUpdateModel = {
-        store_name: input.storeName,
-        email: input.email,
-        password: input.password,
-        CNPJ: input.CNPJ,
-        adress: input.adress,
+      if (input.password) {
+        input.password = await this.hashManager.hash(input.password)
+      }
+
+      const storeUpdate = {
+        store_name: input.storeName ? input.storeName : storeFromDB.storeName,
+        CNPJ: input.CNPJ ? input.CNPJ : storeFromDB.CNPJ,
+        password: input.password ? input.storeName : storeFromDB.password,
+        adress: input.adress ? input.adress : storeFromDB.adress,
         updated_at: updatedAt,
       }
 
-      await this.database.update(store, input.storeId)
+      await this.database.update(input, storeId)
+
+      let message = 'Sucesso'
+
+      return message
     } catch (error: any) {
       throw new Error(error.sqlMessage || error.message)
     }
@@ -305,11 +316,19 @@ export default class StoresBusiness {
 
   async delete(storeId: string, token: string) {
     try {
+      const storeFromDB = await this.database.selectById(storeId)
+      const store = storeFromDB.getStore()
       const tokenData = await this.authenticator.getTokenData(token)
       const tokenStoreId = tokenData.storeId
+      const tokenHeadId = tokenData.headId
+      const tokenRole = tokenData.role
 
       if (!(tokenStoreId === storeId)) {
-        throw new Error('Você não pode deletar outra loja.')
+        if (!(tokenHeadId === store.headId)) {
+          throw new Error(
+            'Somente as próprias lojas ou suas matrizes podem deletar seus registros.',
+          )
+        }
       }
 
       await this.database.delete(storeId)

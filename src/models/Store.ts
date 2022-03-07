@@ -1,7 +1,7 @@
 export default class Store {
   private readonly storeId: string
-  private readonly storeName: string
   private readonly headId: string
+  private readonly storeName: string
   private readonly email: string
   private readonly password: string
   private readonly CNPJ: number
@@ -11,8 +11,8 @@ export default class Store {
   private readonly updatedAt: string
   constructor(
     storeId: string,
-    storeName: string,
     headId: string,
+    storeName: string,
     email: string,
     password: string,
     CNPJ: number,
@@ -22,8 +22,8 @@ export default class Store {
     updatedAt: string,
   ) {
     this.storeId = storeId
-    this.storeName = storeName
     this.headId = headId
+    this.storeName = storeName
     this.email = email
     this.password = password
     this.CNPJ = CNPJ
@@ -44,8 +44,8 @@ export default class Store {
 
   getStore = () => {
     const storeId = this.storeId
-    const storeName = this.storeName
     const headId = this.headId
+    const storeName = this.storeName
     const email = this.email
     const password = this.password
     const CNPJ = this.CNPJ
@@ -56,8 +56,8 @@ export default class Store {
 
     const store: StoresReturn = {
       storeId,
-      storeName,
       headId,
+      storeName,
       email,
       password,
       CNPJ,
@@ -84,8 +84,8 @@ export default class Store {
 
     const storeModel: StoreModel = {
       store_id,
-      store_name,
       head_id,
+      store_name,
       email,
       password,
       CNPJ,
@@ -100,8 +100,8 @@ export default class Store {
   static toStores = (input: StoresDB): Store => {
     const {
       store_id,
-      store_name,
       head_id,
+      store_name,
       email,
       password,
       CNPJ,
@@ -113,8 +113,8 @@ export default class Store {
 
     const store = new Store(
       store_id,
-      store_name,
       head_id,
+      store_name,
       email,
       password,
       CNPJ,
@@ -129,8 +129,8 @@ export default class Store {
 
 export interface StoresReturn {
   storeId: string
-  storeName: string
   headId: string
+  storeName: string
   email: string
   password: string
   CNPJ: number
@@ -141,8 +141,8 @@ export interface StoresReturn {
 }
 export interface StoresDB {
   store_id: string
-  store_name: string
   head_id: string
+  store_name: string
   email: string
   password: string
   CNPJ: number
@@ -161,8 +161,8 @@ export interface SignupDTO {
 
 export interface SignupInput {
   storeId: string
-  storeName: string
   headId: string
+  storeName: string
   email: string
   password: string
   CNPJ: number
@@ -182,8 +182,8 @@ export interface CreateDTO {
 
 export interface CreateInput {
   storeId: string
-  storeName: string
   headId: string
+  storeName: string
   email: string
   password: string
   CNPJ: number
@@ -218,8 +218,8 @@ export interface GetStoreByEmailDTO {
 
 export interface StoreModel {
   store_id: string
-  store_name: string
   head_id: string
+  store_name: string
   email: string
   password: string
   CNPJ: number

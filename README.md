@@ -160,8 +160,8 @@ Para rodar os testes, o seguinte script deve ser executado:
      
      ```
      {
-        "storeName": "name {String}";
-        "email": "email {String}";
+        "storeName": "name {String}",
+        "email": "email {String}",
         "password" : "password {String}",
         "CNPJ": "CNPJ {Number}",
         "adress": "adress {String}"
@@ -221,6 +221,7 @@ Para rodar os testes, o seguinte script deve ser executado:
 - Será criada uma loja filial (role: 'sub') no banco de dados, responsável por gerenciar a rede de lojas.
   
 ------------
+
 - `Login`: <http://localhost:3006/users/login>
   
   - Method: `POST`;

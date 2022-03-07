@@ -1,0 +1,61 @@
+@url = http://localhost:3006
+
+// Cadastrando uma matriz:
+POST {{url}}/stores/signup HTTP/1.1
+Content-Type: application/json
+
+{
+"storeName": "Rio Preto Matriz",
+"email": "riopreto@matriz.com",
+"password" : "123456789",
+"CNPJ": 12345678910,
+"adress": "endereço"
+}
+
+
+//Logando uma matriz:
+###
+POST {{url}}/stores/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "riopreto@matriz.com",
+    "password": "123456789"
+}
+
+
+// Matriz cadastrando uma filial:
+###
+POST {{url}}/stores/create HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdG9yZUlkIjoiMjAwYmFjODEtYjFkNC00ODU1LTgyNzItZWQwZTcyMzk4NDlhIiwiaGVhZElkIjoiMjAwYmFjODEtYjFkNC00ODU1LTgyNzItZWQwZTcyMzk4NDlhIiwicm9sZSI6ImhlYWQiLCJpYXQiOjE2NDY2MTI5NzQsImV4cCI6MTY0NjYxNDQxNH0._24dHUzTNY0UswOOTtLjUqYRkhFLRs-OFVfSw_LTXno
+
+{
+"storeName": "Redentora Filial",
+"email": "redentora@filial.com",
+"password" : "123456789",
+"CNPJ": 12345678910,
+"adress": "endereço"
+}
+
+
+//Logando uma filial:
+###
+POST {{url}}/stores/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "vilaitalia@filial.com",
+    "password": "123456789"
+}
+
+
+// Alterando uma matriz:
+###
+PUT {{url}}/stores/17e54d60-427c-4d84-8384-c1e48d7226fb HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdG9yZUlkIjoiMjAwYmFjODEtYjFkNC00ODU1LTgyNzItZWQwZTcyMzk4NDlhIiwiaGVhZElkIjoiMjAwYmFjODEtYjFkNC00ODU1LTgyNzItZWQwZTcyMzk4NDlhIiwicm9sZSI6ImhlYWQiLCJpYXQiOjE2NDY2MTQ0MzgsImV4cCI6MTY0NjYyODgzOH0.Fq4tWmAmPeuu69fcEsLecldfO_84bpsBQ_2XvVSfyWQ
+
+{
+    "adress": "endereço atualizado"
+}

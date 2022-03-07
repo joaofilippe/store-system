@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import { CreateDTO, SignupDTO } from '../models/Store'
+import { CreateDTO, SignupDTO, StoreUpdateDTO } from '../models/Store'
 import StoresBusiness from '../business/StoresBusiness'
 
 export default class StoresController {
@@ -98,8 +98,13 @@ export default class StoresController {
 
   update = async (req: Request, res: Response) => {
     try {
-      const { storeName, email, password, adress, role } = req.body
-      const token = req.headers.authorization
+      const storeId = req.params.id as string
+      const token = req.headers.authorization as string
+
+      const result = await this.storesBusiness.update(req.body, storeId, token)
+
+      res.send(result)
+
     } catch (error: any) {
       res.send({ message: error.message || error.sqlMessage })
     }

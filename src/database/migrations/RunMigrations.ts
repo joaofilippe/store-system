@@ -4,9 +4,9 @@ import StoresMigrations from './StoresMigrations'
 const productsMigrations = new ProductsMigrations()
 const storeMigrations = new StoresMigrations()
 
-const createTables = async () => {
-  await productsMigrations.create()
+async function createTables ()  {
   await storeMigrations.create()
+  await productsMigrations.create()
 }
 
 createTables()

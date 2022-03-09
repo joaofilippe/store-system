@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "migrations:stores": "nodemon ./src/database/migrations/StoresMigrations.ts",
-    "migrations:products": "nodemon ./src/database/migrations/ProductsMigrations.ts",
-    "dev": "nodemon ./src/index.ts",
-    "build": "tsc",
-    "test": "jest"
+    "migrations:up":"clear && nodemon ./src/database/migrations/RunMigrations.ts",
+    "migrations:stores": "clear && nodemon ./src/database/migrations/StoresMigrations.ts",
+    "migrations:products": "clear && nodemon ./src/database/migrations/ProductsMigrations.ts",
+    "dev": "clear && nodemon ./src/index.ts",
+    "build": "clear && tsc",
+    "test": "clear && jest"
   },
   "repository": {
     "type": "git",

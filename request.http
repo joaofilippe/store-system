@@ -5,8 +5,8 @@ POST {{url}}/stores/signup HTTP/1.1
 Content-Type: application/json
 
 {
-"storeName": "Rio Preto Matriz",
-"email": "riopreto@matriz.com",
+"storeName": "São Paulo Matriz",
+"email": "saopaulo@matriz.com",
 "password" : "123456789",
 "CNPJ": 12345678910,
 "adress": "endereço"
@@ -28,11 +28,10 @@ Content-Type: application/json
 ###
 POST {{url}}/stores/create HTTP/1.1
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdG9yZUlkIjoiMjAwYmFjODEtYjFkNC00ODU1LTgyNzItZWQwZTcyMzk4NDlhIiwiaGVhZElkIjoiMjAwYmFjODEtYjFkNC00ODU1LTgyNzItZWQwZTcyMzk4NDlhIiwicm9sZSI6ImhlYWQiLCJpYXQiOjE2NDY2MTI5NzQsImV4cCI6MTY0NjYxNDQxNH0._24dHUzTNY0UswOOTtLjUqYRkhFLRs-OFVfSw_LTXno
-
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdG9yZUlkIjoiNGU0MWU3ZGEtZjE1Yi00OTEwLTkwNDgtODk4ZDg3NzBhNGZlIiwiaGVhZElkIjoiNGU0MWU3ZGEtZjE1Yi00OTEwLTkwNDgtODk4ZDg3NzBhNGZlIiwicm9sZSI6ImhlYWQiLCJpYXQiOjE2NDY3NzYxNjUsImV4cCI6MTY0Njc5MDU2NX0.XEP-6ckZ_0lgwsoLsuPJEU2WJRzBQ-uQgZDeysMhcOo
 {
-"storeName": "Redentora Filial",
-"email": "redentora@filial.com",
+"storeName": "Paulista",
+"email": "paulista@filial.com",
 "password" : "123456789",
 "CNPJ": 12345678910,
 "adress": "endereço"
@@ -52,10 +51,10 @@ Content-Type: application/json
 
 // Alterando uma matriz:
 ###
-PUT {{url}}/stores/17e54d60-427c-4d84-8384-c1e48d7226fb HTTP/1.1
+PUT {{url}}/stores/cd739290-8dce-41f9-a78c-5dd58ccb64e3 HTTP/1.1
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdG9yZUlkIjoiMjAwYmFjODEtYjFkNC00ODU1LTgyNzItZWQwZTcyMzk4NDlhIiwiaGVhZElkIjoiMjAwYmFjODEtYjFkNC00ODU1LTgyNzItZWQwZTcyMzk4NDlhIiwicm9sZSI6ImhlYWQiLCJpYXQiOjE2NDY2MTQ0MzgsImV4cCI6MTY0NjYyODgzOH0.Fq4tWmAmPeuu69fcEsLecldfO_84bpsBQ_2XvVSfyWQ
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdG9yZUlkIjoiNGU0MWU3ZGEtZjE1Yi00OTEwLTkwNDgtODk4ZDg3NzBhNGZlIiwiaGVhZElkIjoiNGU0MWU3ZGEtZjE1Yi00OTEwLTkwNDgtODk4ZDg3NzBhNGZlIiwicm9sZSI6ImhlYWQiLCJpYXQiOjE2NDY3NzYxNjUsImV4cCI6MTY0Njc5MDU2NX0.XEP-6ckZ_0lgwsoLsuPJEU2WJRzBQ-uQgZDeysMhcOo
 
 {
-    "adress": "endereço atualizado"
+    "adress": "Novo endereço, atualizado pela matriz"
 }

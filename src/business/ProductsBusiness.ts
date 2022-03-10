@@ -13,16 +13,12 @@ import ProductsDatabase from '../database/ProductsDatabase'
 import Product from '../models/Product'
 
 export default class ProductsBussiness {
-  hashManager: HashManager
-  idManager: IdManager
-  authenticator: Authenticator
-  database: ProductsDatabase
-  constructor(database: ProductsDatabase) {
-    this.hashManager = new HashManager()
-    this.idManager = new IdManager()
-    this.authenticator = new Authenticator()
-    this.database = database
-  }
+ 
+    hashManager = new HashManager()
+    idManager = new IdManager()
+    authenticator = new Authenticator()
+    database = new ProductsDatabase ()
+  
 
   async create(input: ProductInputDTO) {
     try {

@@ -21,7 +21,7 @@ export default class StoresController {
 
       res.send({ token })
     } catch (error: any) {
-      res.send(error.message)
+      res.send({error: error.message})
     }
   }
 
@@ -43,7 +43,7 @@ export default class StoresController {
 
       res.send({ message: 'Filial criada com sucesso!' })
     } catch (error: any) {
-      res.send(error.message)
+      res.send({error: error.message})
     }
   }
 
@@ -60,7 +60,7 @@ export default class StoresController {
 
       res.send({ token })
     } catch (error: any) {
-      res.send(error.sqlMessage || error.message)
+      res.send(error.sqlMessage || {error: error.message})
     }
   }
 
@@ -76,7 +76,7 @@ export default class StoresController {
 
       res.send(result)
     } catch (error: any) {
-      res.send({ message: error.message || error.sqlMessage })
+      res.send({ message: {error: error.message} || error.sqlMessage })
     }
   }
 
@@ -92,7 +92,7 @@ export default class StoresController {
 
       res.send(result)
     } catch (error: any) {
-      res.send({ message: error.message || error.sqlMessage })
+      res.send({ message: {error: error.message} || error.sqlMessage })
     }
   }
 
@@ -106,7 +106,7 @@ export default class StoresController {
       res.send(result)
 
     } catch (error: any) {
-      res.send({ message: error.message || error.sqlMessage })
+      res.send({ message: {error: error.message} || error.sqlMessage })
     }
   }
 
@@ -119,7 +119,7 @@ export default class StoresController {
 
       res.send({ message: 'Loja deletada com sucesso!' })
     } catch (error: any) {
-      res.send(error.message)
+      res.send({error: error.message})
     }
   }
 }

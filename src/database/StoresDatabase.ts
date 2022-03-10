@@ -8,7 +8,6 @@ export default class StoresDatabase extends BaseDatabase {
   insert = async (store: Store) => {
     try {
       const storeModel = store.getStoreModel()
-      console.log(storeModel)
       await this.connection(this.tableName).insert(storeModel)
     } catch (error: any) {
       throw new Error(error.sqlMessage || error.message)
@@ -44,8 +43,7 @@ export default class StoresDatabase extends BaseDatabase {
 
   async update(store: any, store_id: string) {
     try {
-      console.log('DATABASE:', store, store_id)
-      await this.connection(this.tableName).update(store).where({store_id})
+      await this.connection(this.tableName).update(store).where({store_id : store_id})
     } catch (error: any) {
       throw new Error(`Error na Database: ${error.sqlMessage || error.message}`)
     }

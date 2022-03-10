@@ -8,11 +8,10 @@ import {
 } from "../models/Product";
 
 export default class ProductsController {
+  business = new ProductsBussiness()
   async create(req: Request, res: Response) {
     let message = "Sucesso";
     try {
-      const database = new ProductsDatabase();
-      const business = new ProductsBussiness(database);
       const { productName, brand, quantity, price } = req.body;
 
       const token = req.headers.authorization as string;
@@ -25,7 +24,7 @@ export default class ProductsController {
         token,
       };
 
-      const productId = await business.create(input);
+      const productId = await this.business.create(input);
       res.send({ message, productId });
     } catch (error: any) {
       res.send(error.message);
@@ -35,8 +34,6 @@ export default class ProductsController {
   async getByStore(req: Request, res: Response) {
     let message = "Sucesso";
     try {
-      const database = new ProductsDatabase();
-      const business = new ProductsBussiness(database);
       const token = req.headers.authorization as string;
       const storeId = req.query.storeId as string;
 
@@ -45,7 +42,7 @@ export default class ProductsController {
         storeId,
       };
 
-      const result = await business.getByStore(input);
+      const result = await this.business.getByStore(input);
       res.send({ message, result });
     } catch (error: any) {
       res.send(error.message);
@@ -55,8 +52,6 @@ export default class ProductsController {
   async getById(req: Request, res: Response) {
     let message = "Sucesso";
     try {
-      const database = new ProductsDatabase();
-      const business = new ProductsBussiness(database);
       const token = req.headers.authorization as string;
       const productId = req.params.id as string;
 
@@ -65,7 +60,7 @@ export default class ProductsController {
         productId,
       };
 
-      const result = await business.getById(input);
+      const result = await this.business.getById(input);
 
       res.send({ message, result });
     } catch (error: any) {
@@ -76,8 +71,6 @@ export default class ProductsController {
   async update(req: Request, res: Response) {
     let message = "Sucesso";
     try {
-      const database = new ProductsDatabase();
-      const business = new ProductsBussiness(database);
       const productId = req.params.id as string;
       const {productName, brand, quantity, price} = req.body
       const token = req.headers.authorization as string
@@ -91,7 +84,7 @@ export default class ProductsController {
           token
       }
 
-      await business.update(productUpdateDTO)
+      await this.business.update(productUpdateDTO)
 
       res.send(message)
 
@@ -102,12 +95,10 @@ export default class ProductsController {
 
   async delete(req: Request, res: Response) {
     try {
-      const database = new ProductsDatabase();
-      const business = new ProductsBussiness(database);
       const token = req.headers.authorization as string
       const productId = req.params.id as string
 
-      await business.delete(productId, token)
+      await this.business.delete(productId, token)
 
       res.send({ message: 'Loja deletada com sucesso!' })
     } catch (error: any) {

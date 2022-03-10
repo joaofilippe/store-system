@@ -1,5 +1,5 @@
 import moment from 'moment'
-import Stores, {
+import Store, {
   CreateDTO,
   EnrollSubDTO,
   GetStoreByEmailDTO,
@@ -7,15 +7,12 @@ import Stores, {
   LoginDTO,
   SignupDTO,
   StoresReturn,
-  StoreUpdateDTO,
-  StoreUpdateModel,
   STORE_ROLE,
 } from '../models/Store'
 import HashManager from '../services/HashManager'
 import IdManager from '../services/IdManager'
 import Authenticator from '../services/Authenticator'
 import StoreDatabase from '../database/StoresDatabase'
-import Store from '../models/Store'
 
 export default class StoresBusiness {
   hashManager = new HashManager()
@@ -36,10 +33,10 @@ export default class StoresBusiness {
       const createdAt = moment().format('YYYY-MM-DD hh:mm:ss').toString()
       const updatedAt = createdAt
 
-      const store = new Stores(
+      const store = new Store(
         storeId,
-        storeName,
         headId,
+        storeName,
         email,
         hashedPassword,
         CNPJ,
@@ -95,8 +92,8 @@ export default class StoresBusiness {
 
       const store = new Store(
         storeId,
-        storeName,
         headId,
+        storeName,
         email,
         hashedPassword,
         CNPJ,
@@ -166,7 +163,7 @@ export default class StoresBusiness {
     const createdAt = moment().format('YYYY-MM-DD hh:mm:ss')
     const updatedAt = createdAt
 
-    const store = new Stores(
+    const store = new Store(
       storeId,
       storeName,
       headId,
@@ -265,7 +262,6 @@ export default class StoresBusiness {
         throw new Error('Por favor, verifique suas credenciais.')
       }
     } catch (error: any) {
-      console.log('Error no Business', error)
       throw new Error(error.sqlMessage || error.message)
     }
   }
@@ -283,13 +279,16 @@ export default class StoresBusiness {
       if (!result) {
         throw new Error('A loja informada não consta no banco de dados!!!')
       }
+   
 
-      if (!(tokenStoreId === storeFromDB.storeId)) {
-        if (!(tokenHeadId === storeFromDB.headId)) {
-          throw new Error(
-            'Somente as próprias lojas ou suas matrizes podem alterar seus registros.',
-          )
-        }
+      if (tokenRole !== 'head' && !(tokenStoreId === storeId)) {
+        throw new Error(
+          'Somente as próprias lojas ou suas matrizes podem alterar seus registros.',
+        )
+      } else if (tokenStoreId != storeFromDB.headId) {
+        throw new Error(
+          'Somente as próprias lojas ou suas matrizes podem alterar seus registros.',
+        )
       }
 
       if (input.password) {

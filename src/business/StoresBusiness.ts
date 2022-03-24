@@ -24,14 +24,31 @@ export default class StoresBusiness {
     try {
       const { storeName, email, password, CNPJ, adress } = input
 
+      const storeCheck : Store = await this.database.selectByEmail(email)
+      if(storeCheck){
+        throw new Error("O email informado já existe no banco de dados.");
+        
+      }
+
+      const regex : RegExp = new RegExp("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\]).{8,32}$")
+      const checkPasswordStrengh : boolean = regex.test(password)
+
+      if (!checkPasswordStrengh){
+        throw new Error("O password deve conter ao menos:\n- 8 caracteres;\n- Um número;\n- Um caracter especial;\n- Uma letra maiúscula e uma letra minúscula");
+        
+      }
+
       const storeId = await this.idManager.generateId()
       const headId = storeId
       const role = STORE_ROLE.HEAD
-
       const hashedPassword = await this.hashManager.hash(password)
-
       const createdAt = moment().format('YYYY-MM-DD hh:mm:ss').toString()
       const updatedAt = createdAt
+      const token: string = this.authenticator.generateToken({
+        storeId,
+        headId,
+        role,
+      })
 
       const store = new Store(
         storeId,
@@ -47,16 +64,11 @@ export default class StoresBusiness {
       )
       await this.database.insert(store)
 
-      const token: string = this.authenticator.generateToken({
-        storeId,
-        headId,
-        role,
-      })
 
       return token
     } catch (error: any) {
       const message = error.message
-      throw new Error(error.message)
+      throw new Error(message)
     }
   }
 
